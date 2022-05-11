@@ -10,8 +10,14 @@
 
 <h1>Bem vindo a Pagina JSP</h1>
 
-<%
-	out.println("Vamos la !");
-%>
+<form action="receber-nome.jsp">
+
+<label>Nome: </label> <input name = "nome">
+<label>Idade: </label><input name = "idade">
+
+<input type="submit" value="Enviar">
+</form>
+
+
 </body>
 </html>
