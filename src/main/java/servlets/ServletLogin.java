@@ -1,11 +1,15 @@
 package servlets;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import model.ModelLogin;
 
 /**
  * Servlet implementation class ServletLogin
@@ -36,8 +40,25 @@ public class ServletLogin extends HttpServlet {
 	//recebe os dados enviados por um formulario
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		System.out.println(request.getParameter("nome"));
-		System.out.println(request.getParameter("idade"));
+		String login = (request.getParameter("login"));
+		String senha = (request.getParameter("senha"));
+		
+		if(login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
+			
+
+			ModelLogin modelLogin = new ModelLogin();
+			modelLogin.setLogin(login);
+			modelLogin.setSenha(senha);
+			
+			
+			
+		}else {
+			
+			RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");//redicionando caso não for informado login e senha.
+			request.setAttribute("msg", "Informe o login e senha corretamente!");
+			redirecionar.forward(request, response);
+		}
+		
 		
 	}
 
