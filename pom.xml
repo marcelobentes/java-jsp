@@ -6,7 +6,18 @@
   <packaging>war</packaging>
   <name>java-jsp</name>
   <description>curso Jdev</description>
-  <build>
+  
+  <dependencies>
+	 <dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>42.3.2</version>
+	</dependency>
+  
+  
+  </dependencies>
+  
+    <build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

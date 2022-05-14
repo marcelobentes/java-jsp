@@ -1,6 +1,8 @@
 package filter;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,16 +16,17 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import connection.SingleConnectionBanco;
+
 /**
  * Servlet Filter implementation class FilterAutenticacao
  */
 @WebFilter(urlPatterns = {"/principal/*"})//intercepetas todas as requisições que vierem do projeto ou mapeamento
 public class FilterAutenticacao extends HttpFilter implements Filter {
+	
+	private static Connection connection;
        
-     
-    /**
-	 * 
-	 */
+    
 	private static final long serialVersionUID = 1L;
 
 
@@ -33,10 +36,18 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 
 	//encerra o processo quando o servidor é parado
 	public void destroy() {
+		
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
 	}
 
 	/*Interceptas as requisições e as respostas no sistema*/
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		try {
 		
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession();
@@ -58,10 +69,25 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 		chain.doFilter(request, response);
 		
 		}
+		
+		connection.commit();/*salva as alteração no banco*/
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	/*Inicia os processos ou recursos quando o servidor sobe o projeto*/
 	public void init(FilterConfig fConfig) throws ServletException {
+		
+		connection = SingleConnectionBanco.getConnection();
 		
 	}
 
